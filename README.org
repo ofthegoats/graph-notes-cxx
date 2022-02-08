@@ -1,0 +1,5 @@
+#+TITLE: graph-notes-cxx
+
+Graph-Notes is an application for taking handwritten notes and storing them as a graph.
+
+It uses Qt5 and sqlite3
