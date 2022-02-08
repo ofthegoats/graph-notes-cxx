@@ -1,7 +1,9 @@
 #include "graph.hpp"
 
 #include <list>
+#include <string>
 #include <utility>
+#include <vector>
 
 Graph::Graph() { this->graph = {}; }
 
@@ -52,4 +54,27 @@ bool Graph::contains_edge(int src_id, int dest_id)
             for (auto m : n.second)
                 if (m == dest_id) return true;
     return false;
+}
+
+std::vector<int> Graph::outbound_links(int src_id)
+{
+    std::vector<int> ids;
+    for (auto n : this->graph)
+        if (n.first.id == src_id)
+            for (auto dest_id : n.second)
+                ids.push_back(dest_id);
+    return ids;
+}
+
+std::vector<int> Graph::inbound_links(int dest_id)
+{
+    std::vector<int> ids;
+    bool             has_link;
+    for (auto n : this->graph) {
+        has_link = false;
+        for (auto m : n.second)
+            if (m == dest_id) has_link = true;
+        if (has_link) ids.push_back(n.first.id);
+    }
+    return ids;
 }

@@ -4,6 +4,7 @@
 #include <list>     // std::list
 #include <string>   // std::string
 #include <utility>  // std::pair
+#include <vector>   // std::vector
 
 struct node {
     int         id;
@@ -19,8 +20,12 @@ public:
     void remove_node(int);
     void add_edge(int, int);
     void remove_edge(int, int);
+
     bool contains_node(int);
     bool contains_edge(int, int);
+
+    std::vector<int> outbound_links(int);
+    std::vector<int> inbound_links(int);
 
 private:
     std::list<std::pair<struct node, std::list<int>>> graph;  // adjacency list
