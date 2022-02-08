@@ -1,5 +1,6 @@
 #include "graph.hpp"
 
+#include <list>
 #include <utility>
 
 Graph::Graph() { this->graph = {}; }
