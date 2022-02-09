@@ -17,7 +17,7 @@ void Graph::remove_node(int id)
 {
     // start by removing node from adj. list
     // qualifier is a lambda
-    this->graph.remove_if([id](const std::pair<struct node, std::list<struct node>> n) {
+    this->graph.remove_if([id](const std::pair<struct node, std::list<int>> n) {
         return n.first.id == id;
     });
     // then remove all edges which contain the node
