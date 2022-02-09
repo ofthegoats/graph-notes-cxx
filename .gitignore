@@ -2,3 +2,6 @@
 graph-notes-cxx
 releases
 debug
+.cache
+.qmake.stash
+compile_commands.json
