@@ -1,0 +1,4 @@
+*.o
+graph-notes-cxx
+releases
+debug
