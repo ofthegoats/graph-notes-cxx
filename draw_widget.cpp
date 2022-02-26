@@ -6,7 +6,12 @@ Ui::DrawWidget::DrawWidget(QWidget* parent) : QWidget(parent)
 {
     // do not change contents on resize
     setAttribute(Qt::WA_StaticContents);
+    drawing = false;
+    penColour = Qt::black;
+    penWidth = 5;
 }
+
+void Ui::DrawWidget::setPenColour(QColor newColour) { this->penColour = newColour; }
 
 void Ui::DrawWidget::mousePressEvent(QMouseEvent* event)
 {

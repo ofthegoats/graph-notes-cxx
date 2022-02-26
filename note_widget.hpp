@@ -19,12 +19,20 @@ public:
 
 public slots:
     void saveNote();
+    void setColourBlack();
+    void setColourRed();
+    void setColourGreen();
+    void setColourBlue();
 
 private:
     Ui::DrawWidget* drawArea;
     QString         filename;
     QGridLayout*    gridLayout;
     QPushButton*    saveButton;
+    QPushButton*    blackButton;
+    QPushButton*    redButton;
+    QPushButton*    greenButton;
+    QPushButton*    blueButton;
 };
 }  // namespace Ui
 
