@@ -5,3 +5,5 @@ debug
 .cache
 .qmake.stash
 compile_commands.json
+Makefile
+moc*
