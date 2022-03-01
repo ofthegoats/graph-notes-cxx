@@ -17,6 +17,7 @@ public:
     ~DrawWidget() = default;  // destructor
 
     void setPenColour(QColor);
+    void setPenWidth(int);
 
 protected:
     void mousePressEvent(QMouseEvent*) override;

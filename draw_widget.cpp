@@ -8,10 +8,12 @@ Ui::DrawWidget::DrawWidget(QWidget* parent) : QWidget(parent)
     setAttribute(Qt::WA_StaticContents);
     drawing = false;
     penColour = Qt::black;
-    penWidth = 5;
+    penWidth = 4;
 }
 
-void Ui::DrawWidget::setPenColour(QColor newColour) { this->penColour = newColour; }
+void Ui::DrawWidget::setPenColour(QColor newColour) { penColour = newColour; }
+
+void Ui::DrawWidget::setPenWidth(int newWidth) { penWidth = newWidth; }
 
 void Ui::DrawWidget::mousePressEvent(QMouseEvent* event)
 {

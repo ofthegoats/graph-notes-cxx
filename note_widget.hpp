@@ -23,16 +23,22 @@ public slots:
     void setColourRed();
     void setColourGreen();
     void setColourBlue();
+    void setWidthThin();
+    void setWidthMedium();
+    void setWidthThick();
 
 private:
-    Ui::DrawWidget* drawArea;
-    QString         filename;
+    Ui::DrawWidget* drawArea;  // area for drawing on note
+    QString         filename;  // used for graphs
     QGridLayout*    gridLayout;
-    QPushButton*    saveButton;
-    QPushButton*    blackButton;
+    QPushButton*    saveButton;   // write note to file
+    QPushButton*    blackButton;  // change pen colour
     QPushButton*    redButton;
     QPushButton*    greenButton;
     QPushButton*    blueButton;
+    QPushButton*    thinButton;  // change pen width
+    QPushButton*    mediumButton;
+    QPushButton*    thickButton;
 };
 }  // namespace Ui
 
