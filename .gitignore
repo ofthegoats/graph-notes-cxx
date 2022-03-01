@@ -7,3 +7,5 @@ debug
 compile_commands.json
 Makefile
 moc*
+*.png
+*.db
