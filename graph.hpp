@@ -14,18 +14,20 @@ struct node {
 class Graph
 {
 public:
-    Graph();           // constructor
-    virtual ~Graph();  // destructor
-    void add_node(int, std::string);
-    void remove_node(int);
-    void add_edge(int, int);
-    void remove_edge(int, int);
+    Graph();                     // constructor
+    virtual ~Graph() = default;  // destructor
+    void addNode(int, std::string);
+    void removeNode(int);
+    void addEdge(int, int);
+    void removeEdge(int, int);
 
-    bool contains_node(int);
-    bool contains_edge(int, int);
+    bool containsNode(int);
+    bool containsEdge(int, int);
 
-    std::vector<int> outbound_links(int);
-    std::vector<int> inbound_links(int);
+    std::vector<int> outboundLinks(int);
+    std::vector<int> inboundLinks(int);
+
+    std::vector<struct node> getNodes();
 
 private:
     std::list<std::pair<struct node, std::list<int>>> graph;  // adjacency list

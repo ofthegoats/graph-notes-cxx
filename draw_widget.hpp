@@ -19,6 +19,9 @@ public:
     void setPenColour(QColor);
     void setPenWidth(int);
 
+    void saveImage(QString);
+    void openImage(QString);
+
 protected:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;

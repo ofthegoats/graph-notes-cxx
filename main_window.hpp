@@ -19,18 +19,21 @@ public:
 
 public slots:
     void openDBButtonClicked();
+    void newDBButtonClicked();
+    void openNoteButtonClicked();
     void newNoteButtonClicked();
     void allFilesListItemClicked(QListWidgetItem*);
     void openDB(QString);
-    void openNote(QString);
+    void openNoteTab(QString);
 
 protected:
 private:
-    QPushButton* openFileButton;
-    QPushButton* newNoteButton;
-    QPushButton* saveNoteButton;
-    QListWidget* allFilesList;
-    QTabWidget*  notesTabs;
+    QPushButton* openDBButton;    // open database
+    QPushButton* newDBButton;     // open database
+    QPushButton* openNoteButton;  // open standalone note
+    QPushButton* newNoteButton;   // create a new note
+    QListWidget* allFilesList;    // list of all files in db
+    QTabWidget*  notesTabs;       // tabs of open files
     QGridLayout* gridLayout;
     QWidget*     layoutWidget;  // placeholder, to set layout
 };

@@ -25,3 +25,5 @@ SOURCES += database.cpp \
            main.cpp
 
 QT += widgets
+
+LIBS += -lsqlite3

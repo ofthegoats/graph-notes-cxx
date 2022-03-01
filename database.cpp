@@ -176,10 +176,10 @@ int graph_build_nodes_cb(void* p, int count, char** dat, char** col)
 {
     Graph* g = (Graph*)p;
     int    id;
-    char*  fp;
+    char*  fp = NULL;
     sscanf(dat[0], "%d", &id);
     sscanf(dat[1], "%s", fp);
-    g->add_node(id, fp);
+    g->addNode(id, fp);
     return 0;
 }
 
@@ -190,6 +190,6 @@ int graph_build_edges_cb(void* p, int count, char** dat, char** col)
     int    dest;
     sscanf(dat[0], "%d", &src);
     sscanf(dat[1], "%d", &dest);
-    g->add_edge(src, dest);
+    g->addEdge(src, dest);
     return 0;
 }

@@ -36,10 +36,8 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     connect(thickButton, SIGNAL(clicked()), this, SLOT(setWidthThick()));
 }
 
-void Ui::NoteWidget::saveNote()
-{
-    // TODO
-}
+void Ui::NoteWidget::saveNote() { drawArea->saveImage(filename); }
+void Ui::NoteWidget::openNote() { drawArea->openImage(filename); }
 
 void Ui::NoteWidget::setColourBlack() { drawArea->setPenColour(Qt::black); }
 void Ui::NoteWidget::setColourRed() { drawArea->setPenColour(Qt::red); }

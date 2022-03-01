@@ -19,6 +19,7 @@ public:
 
 public slots:
     void saveNote();
+    void openNote();
     void setColourBlack();
     void setColourRed();
     void setColourGreen();

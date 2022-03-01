@@ -1,5 +1,6 @@
 #include "draw_widget.hpp"
 
+#include <QDebug>
 #include <QPainter>
 
 Ui::DrawWidget::DrawWidget(QWidget* parent) : QWidget(parent)
@@ -12,8 +13,15 @@ Ui::DrawWidget::DrawWidget(QWidget* parent) : QWidget(parent)
 }
 
 void Ui::DrawWidget::setPenColour(QColor newColour) { penColour = newColour; }
-
 void Ui::DrawWidget::setPenWidth(int newWidth) { penWidth = newWidth; }
+
+void Ui::DrawWidget::saveImage(QString filename) { image.save(filename, "png"); }
+
+void Ui::DrawWidget::openImage(QString filename)
+{
+    image.load(filename, "png");
+    update();
+}
 
 void Ui::DrawWidget::mousePressEvent(QMouseEvent* event)
 {
