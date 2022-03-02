@@ -5,12 +5,24 @@
 #include <utility>
 #include <vector>
 
-Graph::Graph() { this->graph = {}; }
+Graph::Graph()
+{
+    this->graph = {};
+    this->highestId = 0;
+}
 
 void Graph::addNode(int id, std::string fp)
 {
+    if (id > this->highestId) this->highestId = id;
     if (!this->containsNode(id))
         this->graph.push_back(std::make_pair(node {id, fp}, std::list<int>()));
+}
+
+int Graph::addNode(std::string fp)
+{
+    int id = ++(this->highestId);
+    addNode(id, fp);
+    return id;
 }
 
 void Graph::removeNode(int id)

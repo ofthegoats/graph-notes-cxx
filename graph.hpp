@@ -17,6 +17,7 @@ public:
     Graph();                     // constructor
     virtual ~Graph() = default;  // destructor
     void addNode(int, std::string);
+    int  addNode(std::string);
     void removeNode(int);
     void addEdge(int, int);
     void removeEdge(int, int);
@@ -30,6 +31,7 @@ public:
     std::vector<struct node> getNodes();
 
 private:
+    int                                               highestId;
     std::list<std::pair<struct node, std::list<int>>> graph;  // adjacency list
 };
 
