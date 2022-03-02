@@ -1,6 +1,8 @@
 #ifndef MAIN_WINDOW_H_
 #define MAIN_WINDOW_H_
 
+#include "graph.hpp"
+
 #include <QGridLayout>
 #include <QListWidget>
 #include <QMainWindow>
@@ -28,6 +30,9 @@ public slots:
 
 protected:
 private:
+    Graph        g;
+    bool         dbIsOpen;        // whether there is an open database
+    QString      dbFilepath;      // where that database is
     QPushButton* openDBButton;    // open database
     QPushButton* newDBButton;     // open database
     QPushButton* openNoteButton;  // open standalone note

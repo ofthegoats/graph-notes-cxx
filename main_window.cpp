@@ -15,6 +15,8 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     newNoteButton = new QPushButton("new note", this);
     notesTabs = new QTabWidget(this);
     allFilesList = new QListWidget(this);
+    dbIsOpen = false;  // no db open by default
+    dbFilepath = "";
 
     layoutWidget->setLayout(gridLayout);
     setCentralWidget(layoutWidget);  // set grid layout for mainwindow
@@ -54,6 +56,11 @@ void Ui::MainWindow::openNoteButtonClicked()
 {
     QString fp =
       QFileDialog::getOpenFileName(this, "open note", ".", "note files(*.png)");
+    // when db is open, new notes join the graph and db
+    if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
+        int id = g.addNode(fp.toStdString());
+        db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
+    }
     openNoteTab(fp);
 }
 
@@ -61,6 +68,11 @@ void Ui::MainWindow::newNoteButtonClicked()
 {
     QString fp =
       QFileDialog::getSaveFileName(this, "open note", ".", "note files(*.png)");
+    // when db is open, new notes join the graph and db
+    if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
+        int id = g.addNode(fp.toStdString());
+        db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
+    }
     openNoteTab(fp);
 }
 
@@ -71,7 +83,9 @@ void Ui::MainWindow::allFilesListItemClicked(QListWidgetItem* item)
 
 void Ui::MainWindow::openDB(QString filename)
 {
-    Graph g = db_get_graph(filename.toLocal8Bit().data());
+    g = db_get_graph(filename.toLocal8Bit().data());
+    dbIsOpen = true;
+    dbFilepath = filename;
     for (auto node : g.getNodes())
         allFilesList->addItem(QString::fromStdString(node.data));
 }
