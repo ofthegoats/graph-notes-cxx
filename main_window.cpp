@@ -60,6 +60,7 @@ void Ui::MainWindow::openNoteButtonClicked()
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         int id = g.addNode(fp.toStdString());
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
+        allFilesList->addItem(QString::fromStdString(fp.toStdString()));
     }
     openNoteTab(fp);
 }
@@ -72,6 +73,7 @@ void Ui::MainWindow::newNoteButtonClicked()
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         int id = g.addNode(fp.toStdString());
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
+        allFilesList->addItem(QString::fromStdString(fp.toStdString()));
     }
     openNoteTab(fp);
 }
