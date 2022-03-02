@@ -22,6 +22,8 @@ public:
     void addEdge(int, int);
     void removeEdge(int, int);
 
+    int findId(std::string);
+
     bool containsNode(int);
     bool containsEdge(int, int);
 

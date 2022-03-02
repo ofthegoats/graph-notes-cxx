@@ -51,6 +51,15 @@ void Graph::removeEdge(int src_id, int dest_id)
             n.second.remove_if([dest_id](const int id) { return id == dest_id; });
 }
 
+// return node id if data exists in G
+// else return -1
+int Graph::findId(std::string data)
+{
+    for (auto n : this->graph)
+        if (n.first.data == data) return n.first.id;
+    return -1;
+}
+
 bool Graph::containsNode(int id)
 {
     for (auto n : this->graph)
