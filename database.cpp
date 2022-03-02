@@ -50,9 +50,10 @@ int db_add_node(const char* filename, int id, const char* fp)
     sqlite3* db;
     char*    err_msg = NULL;
     int      rc;
-    char*    sql;
+    char     sql[1024];
     sprintf(sql,
-      "PRAGMA foreign_keys = ON;INSERT INTO Node(id, filepath) VALUES(%d, %s);", id, fp);
+      "PRAGMA foreign_keys = ON; INSERT INTO Node(id, filepath) VALUES(%d, \"%s\");", id,
+      fp);
     rc = sqlite3_open(filename, &db);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "opening database failed\n");
@@ -75,7 +76,7 @@ int db_remove_node(const char* filename, int id)
     sqlite3* db;
     char*    err_msg = NULL;
     int      rc;
-    char*    sql;
+    char     sql[1024];
     sprintf(sql, "PRAGMA foreign_keys = ON;DELETE FROM Node WHERE id = %d;", id);
     rc = sqlite3_open(filename, &db);
     if (rc != SQLITE_OK) {
@@ -99,7 +100,7 @@ int db_add_edge(const char* filename, int src, int dest)
     sqlite3* db;
     char*    err_msg = NULL;
     int      rc;
-    char*    sql;
+    char     sql[1024];
     sprintf(sql, "PRAGMA foreign_keys = ON;INSERT INTO Edge(src, dest) VALUES (%d, %d);",
       src, dest);
     rc = sqlite3_open(filename, &db);
@@ -124,7 +125,7 @@ int db_remove_edge(const char* filename, int src, int dest)
     sqlite3* db;
     char*    err_msg = NULL;
     int      rc;
-    char*    sql;
+    char     sql[1024];
     sprintf(sql, "PRAGMA foreign_keys = ON;DELETE FROM Edge WHERE src = %d AND dest = %d",
       src, dest);
     rc = sqlite3_open(filename, &db);
@@ -175,10 +176,8 @@ Graph db_get_graph(const char* filename)
 int graph_build_nodes_cb(void* p, int count, char** dat, char** col)
 {
     Graph* g = (Graph*)p;
-    int    id;
-    char*  fp = NULL;
-    sscanf(dat[0], "%d", &id);
-    sscanf(dat[1], "%s", fp);
+    int    id = atoi(dat[0]);
+    char*  fp = dat[1];
     g->addNode(id, fp);
     return 0;
 }
@@ -186,10 +185,8 @@ int graph_build_nodes_cb(void* p, int count, char** dat, char** col)
 int graph_build_edges_cb(void* p, int count, char** dat, char** col)
 {
     Graph* g = (Graph*)p;
-    int    src;
-    int    dest;
-    sscanf(dat[0], "%d", &src);
-    sscanf(dat[1], "%d", &dest);
+    int    src = atoi(dat[0]);
+    int    dest = atoi(dat[1]);
     g->addEdge(src, dest);
     return 0;
 }

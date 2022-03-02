@@ -8,10 +8,10 @@
 
 // returns whether operation succeeded
 int db_prepare(const char*);
-int db_add_node(const char*, void*, const char*);
-int db_remove_node(const char*, void*);
-int db_add_edge(const char*, void*, void*);
-int db_remove_edge(const char*, void*, void*);
+int db_add_node(const char*, int, const char*);
+int db_remove_node(const char*, int);
+int db_add_edge(const char*, int, int);
+int db_remove_edge(const char*, int, int);
 
 Graph db_get_graph(const char*);
 
