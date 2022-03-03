@@ -24,6 +24,7 @@ public slots:
     void setColourRed();
     void setColourGreen();
     void setColourBlue();
+    void setEraser();
     void setWidthThin();
     void setWidthMedium();
     void setWidthThick();
@@ -40,6 +41,7 @@ private:
     QPushButton*    thinButton;  // change pen width
     QPushButton*    mediumButton;
     QPushButton*    thickButton;
+    QPushButton*    eraserButton;
 };
 }  // namespace Ui
 

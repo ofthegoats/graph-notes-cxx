@@ -11,6 +11,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     thinButton = new QPushButton("thin", this);
     mediumButton = new QPushButton("medium", this);
     thickButton = new QPushButton("thick", this);
+    eraserButton = new QPushButton("eraser", this);
     drawArea = new Ui::DrawWidget(this);
     filename = fp;
 
@@ -23,7 +24,8 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     gridLayout->addWidget(thinButton, 0, 5);
     gridLayout->addWidget(mediumButton, 0, 6);
     gridLayout->addWidget(thickButton, 0, 7);
-    gridLayout->addWidget(drawArea, 1, 0, 1, 8);
+    gridLayout->addWidget(eraserButton, 0, 8);
+    gridLayout->addWidget(drawArea, 1, 0, 1, 9);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
@@ -34,6 +36,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     connect(thinButton, SIGNAL(clicked()), this, SLOT(setWidthThin()));
     connect(mediumButton, SIGNAL(clicked()), this, SLOT(setWidthMedium()));
     connect(thickButton, SIGNAL(clicked()), this, SLOT(setWidthThick()));
+    connect(eraserButton, SIGNAL(clicked()), this, SLOT(setEraser()));
 }
 
 void Ui::NoteWidget::saveNote() { drawArea->saveImage(filename); }
@@ -43,7 +46,8 @@ void Ui::NoteWidget::setColourBlack() { drawArea->setPenColour(Qt::black); }
 void Ui::NoteWidget::setColourRed() { drawArea->setPenColour(Qt::red); }
 void Ui::NoteWidget::setColourGreen() { drawArea->setPenColour(Qt::green); }
 void Ui::NoteWidget::setColourBlue() { drawArea->setPenColour(Qt::blue); }
+void Ui::NoteWidget::setEraser() { drawArea->setPenColour(Qt::white); }
 
-void Ui::NoteWidget::setWidthThin() { drawArea->setPenWidth(2); }
-void Ui::NoteWidget::setWidthMedium() { drawArea->setPenWidth(4); }
-void Ui::NoteWidget::setWidthThick() { drawArea->setPenWidth(6); }
+void Ui::NoteWidget::setWidthThin() { drawArea->setPenWidth(4); }
+void Ui::NoteWidget::setWidthMedium() { drawArea->setPenWidth(8); }
+void Ui::NoteWidget::setWidthThick() { drawArea->setPenWidth(12); }
