@@ -62,7 +62,7 @@ void Ui::MainWindow::openNoteButtonClicked()
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         allFilesList->addItem(QString::fromStdString(fp.toStdString()));
     }
-    openNoteTab(fp);
+    openNoteTab(fp, true);
 }
 
 void Ui::MainWindow::newNoteButtonClicked()
@@ -75,12 +75,12 @@ void Ui::MainWindow::newNoteButtonClicked()
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         allFilesList->addItem(QString::fromStdString(fp.toStdString()));
     }
-    openNoteTab(fp);
+    openNoteTab(fp, false);
 }
 
 void Ui::MainWindow::allFilesListItemClicked(QListWidgetItem* item)
 {
-    openNoteTab(item->text());
+    openNoteTab(item->text(), true);
 }
 
 void Ui::MainWindow::openDB(QString filename)
@@ -92,9 +92,9 @@ void Ui::MainWindow::openDB(QString filename)
         allFilesList->addItem(QString::fromStdString(node.data));
 }
 
-void Ui::MainWindow::openNoteTab(QString filename)
+void Ui::MainWindow::openNoteTab(QString filename, bool exists)
 {
     NoteWidget* note = new NoteWidget(notesTabs, filename);
-    note->openNote();
+    if (exists) note->openNote();
     notesTabs->addTab(note, filename);
 }
