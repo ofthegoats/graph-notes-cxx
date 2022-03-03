@@ -40,6 +40,7 @@ void Ui::MainWindow::openDBButtonClicked()
 {
     QString fp =
       QFileDialog::getOpenFileName(this, "open db", ".", "graph db files(*.db)");
+    if (fp == "") return;
     db_prepare(fp.toLocal8Bit().data());
     openDB(fp);
 }
@@ -48,6 +49,7 @@ void Ui::MainWindow::newDBButtonClicked()
 {
     QString fp =
       QFileDialog::getSaveFileName(this, "open db", ".", "graph db files(*.db)");
+    if (fp == "") return;
     db_prepare(fp.toLocal8Bit().data());
     openDB(fp);
 }
@@ -56,6 +58,7 @@ void Ui::MainWindow::openNoteButtonClicked()
 {
     QString fp =
       QFileDialog::getOpenFileName(this, "open note", ".", "note files(*.png)");
+    if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         int id = g.addNode(fp.toStdString());
@@ -69,6 +72,7 @@ void Ui::MainWindow::newNoteButtonClicked()
 {
     QString fp =
       QFileDialog::getSaveFileName(this, "open note", ".", "note files(*.png)");
+    if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         int id = g.addNode(fp.toStdString());
