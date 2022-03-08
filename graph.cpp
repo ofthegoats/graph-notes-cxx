@@ -1,5 +1,6 @@
 #include "graph.hpp"
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <utility>
@@ -76,27 +77,35 @@ bool Graph::containsEdge(int src_id, int dest_id)
     return false;
 }
 
-std::vector<int> Graph::outboundLinks(int src_id)
+std::vector<node> Graph::outboundLinks(int src_id)
 {
-    std::vector<int> ids;
+    std::vector<int>  ids;
+    std::vector<node> nodes;
     for (auto n : this->graph)
         if (n.first.id == src_id)
             for (auto dest_id : n.second)
                 ids.push_back(dest_id);
-    return ids;
+    for (auto i : ids)
+        for (auto n : this->graph)
+            if (i == n.first.id) nodes.push_back(n.first);
+    return nodes;
 }
 
-std::vector<int> Graph::inboundLinks(int dest_id)
+std::vector<node> Graph::inboundLinks(int dest_id)
 {
-    std::vector<int> ids;
-    bool             has_link;
+    std::vector<int>  ids;
+    std::vector<node> nodes;
+    bool              has_link;
     for (auto n : this->graph) {
         has_link = false;
         for (auto m : n.second)
             if (m == dest_id) has_link = true;
         if (has_link) ids.push_back(n.first.id);
     }
-    return ids;
+    for (auto i : ids)
+        for (auto n : this->graph)
+            if (i == n.first.id) nodes.push_back(n.first);
+    return nodes;
 }
 
 std::vector<struct node> Graph::getNodes()

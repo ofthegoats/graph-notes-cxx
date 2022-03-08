@@ -27,8 +27,8 @@ public:
     bool containsNode(int);
     bool containsEdge(int, int);
 
-    std::vector<int> outboundLinks(int);
-    std::vector<int> inboundLinks(int);
+    std::vector<node> outboundLinks(int);
+    std::vector<node> inboundLinks(int);
 
     std::vector<struct node> getNodes();
 
