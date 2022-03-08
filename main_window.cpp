@@ -18,6 +18,11 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     dbIsOpen = false;  // no db open by default
     dbFilepath = "";
 
+    // sane settings for a tab widget
+    notesTabs->setMovable(true);
+    notesTabs->setTabsClosable(true);
+    connect(notesTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
     layoutWidget->setLayout(gridLayout);
     setCentralWidget(layoutWidget);  // set grid layout for mainwindow
     gridLayout->addWidget(openDBButton, 0, 0);
@@ -102,3 +107,5 @@ void Ui::MainWindow::openNoteTab(QString filename, bool exists)
     if (exists) note->openNote();
     notesTabs->addTab(note, filename);
 }
+
+void Ui::MainWindow::closeTab(int index) { notesTabs->removeTab(index); }

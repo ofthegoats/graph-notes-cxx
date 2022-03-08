@@ -27,6 +27,7 @@ public slots:
     void allFilesListItemClicked(QListWidgetItem*);
     void openDB(QString);
     void openNoteTab(QString, bool);
+    void closeTab(int);
 
 protected:
 private:
