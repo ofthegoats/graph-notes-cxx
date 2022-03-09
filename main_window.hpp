@@ -24,7 +24,7 @@ public slots:
     void newDBButtonClicked();
     void openNoteButtonClicked();
     void newNoteButtonClicked();
-    void allFilesListItemClicked(QListWidgetItem*);
+    void listItemClicked(QListWidgetItem*);
     void openDB(QString);
     void openNoteTab(QString, bool);
     void closeTab(int);
@@ -32,6 +32,7 @@ public slots:
 protected:
 private:
     Graph        g;
+    int          currentId;
     bool         dbIsOpen;        // whether there is an open database
     QString      dbFilepath;      // where that database is
     QPushButton* openDBButton;    // open database

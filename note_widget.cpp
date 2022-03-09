@@ -25,7 +25,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     gridLayout->addWidget(mediumButton, 0, 6);
     gridLayout->addWidget(thickButton, 0, 7);
     gridLayout->addWidget(eraserButton, 0, 8);
-    gridLayout->addWidget(drawArea, 1, 0, 1, 9);
+    gridLayout->addWidget(drawArea, 1, 0, 2, 9);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));

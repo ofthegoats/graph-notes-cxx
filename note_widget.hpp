@@ -16,6 +16,7 @@ class NoteWidget : public QWidget
 public:
     NoteWidget(QWidget*, QString);  // constructor
     ~NoteWidget() = default;        // destructor
+    QString getFilename() { return filename; };
 
 public slots:
     void saveNote();
@@ -31,7 +32,7 @@ public slots:
 
 private:
     Ui::DrawWidget* drawArea;  // area for drawing on note
-    QString         filename;  // used for graphs
+    QString         filename;  // used for saves/loads
     QGridLayout*    gridLayout;
     QPushButton*    saveButton;   // write note to file
     QPushButton*    blackButton;  // change pen colour

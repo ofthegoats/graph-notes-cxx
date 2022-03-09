@@ -18,7 +18,7 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     dbIsOpen = false;  // no db open by default
     dbFilepath = "";
 
-    // sane settings for a tab widget
+    // settings for a tab widget
     notesTabs->setMovable(true);
     notesTabs->setTabsClosable(true);
     connect(notesTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
@@ -38,7 +38,7 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     connect(openNoteButton, SIGNAL(clicked()), this, SLOT(openNoteButtonClicked()));
     connect(newNoteButton, SIGNAL(clicked()), this, SLOT(newNoteButtonClicked()));
     connect(allFilesList, SIGNAL(itemClicked(QListWidgetItem*)), this,
-      SLOT(allFilesListItemClicked(QListWidgetItem*)));
+      SLOT(listItemClicked(QListWidgetItem*)));
 }
 
 void Ui::MainWindow::openDBButtonClicked()
@@ -66,9 +66,13 @@ void Ui::MainWindow::openNoteButtonClicked()
     if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
-        int id = g.addNode(fp.toStdString());
+        QFileInfo        file(fp);
+        int              id = g.addNode(fp.toStdString());
+        QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
-        allFilesList->addItem(QString::fromStdString(fp.toStdString()));
+        newItem->setData(Qt::UserRole, fp);
+        newItem->setText(file.baseName());
+        allFilesList->addItem(newItem);
     }
     openNoteTab(fp, true);
 }
@@ -80,16 +84,20 @@ void Ui::MainWindow::newNoteButtonClicked()
     if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
-        int id = g.addNode(fp.toStdString());
+        QFileInfo        file(fp);
+        int              id = g.addNode(fp.toStdString());
+        QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
-        allFilesList->addItem(QString::fromStdString(fp.toStdString()));
+        newItem->setData(Qt::UserRole, fp);
+        newItem->setText(file.baseName());
+        allFilesList->addItem(newItem);
     }
     openNoteTab(fp, false);
 }
 
-void Ui::MainWindow::allFilesListItemClicked(QListWidgetItem* item)
+void Ui::MainWindow::listItemClicked(QListWidgetItem* item)
 {
-    openNoteTab(item->text(), true);
+    openNoteTab(item->data(Qt::UserRole).toString(), true);
 }
 
 void Ui::MainWindow::openDB(QString filename)
@@ -97,15 +105,20 @@ void Ui::MainWindow::openDB(QString filename)
     g = db_get_graph(filename.toLocal8Bit().data());
     dbIsOpen = true;
     dbFilepath = filename;
-    for (auto node : g.getNodes())
-        allFilesList->addItem(QString::fromStdString(node.data));
+    for (auto node : g.getNodes()) {
+        QFileInfo        file(QString::fromStdString(node.data));
+        QListWidgetItem* newItem = new QListWidgetItem;
+        newItem->setData(Qt::UserRole, file.absoluteFilePath());
+        newItem->setText(file.baseName());
+        allFilesList->addItem(newItem);
+    }
 }
 
 void Ui::MainWindow::openNoteTab(QString filename, bool exists)
 {
     NoteWidget* note = new NoteWidget(notesTabs, filename);
     if (exists) note->openNote();
-    notesTabs->addTab(note, filename);
+    notesTabs->addTab(note, QFileInfo(filename).baseName());
 }
 
 void Ui::MainWindow::closeTab(int index) { notesTabs->removeTab(index); }
