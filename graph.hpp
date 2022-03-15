@@ -32,6 +32,8 @@ public:
 
     std::vector<struct node> getNodes();
 
+    void traversal();  // useful for debugging
+
 private:
     int                                               highestId;
     std::list<std::pair<struct node, std::list<int>>> graph;  // adjacency list

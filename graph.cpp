@@ -1,6 +1,7 @@
 #include "graph.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <list>
 #include <string>
 #include <utility>
@@ -40,16 +41,18 @@ void Graph::removeNode(int id)
 void Graph::addEdge(int src_id, int dest_id)
 {
     // only add the edge if it does not already exist
-    if (!this->containsEdge(src_id, dest_id))
-        for (auto n : this->graph)
-            if (n.first.id == src_id) n.second.push_back(dest_id);
+    if (!this->containsEdge(src_id, dest_id)) {
+        for (auto it = this->graph.begin(); it != this->graph.end(); it++) {
+            if (it->first.id == src_id) { it->second.push_back(dest_id); }
+        }
+    }
 }
 
 void Graph::removeEdge(int src_id, int dest_id)
 {
-    for (auto n : this->graph)
-        if (n.first.id == src_id)
-            n.second.remove_if([dest_id](const int id) { return id == dest_id; });
+    for (auto it = this->graph.begin(); it != this->graph.end(); it++)
+        if (it->first.id == src_id)
+            it->second.remove_if([dest_id](const int id) { return id == dest_id; });
 }
 
 // return node id if data exists in G
@@ -114,4 +117,14 @@ std::vector<struct node> Graph::getNodes()
     for (auto pair : graph)
         nodes.push_back(pair.first);
     return nodes;
+}
+
+void Graph::traversal()
+{
+    for (auto pair : graph) {
+        std::cout << pair.first.id << ": ";
+        for (auto id : pair.second)
+            std::cout << id << ", ";
+        std::cout << std::endl;
+    }
 }
