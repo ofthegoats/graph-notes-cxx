@@ -5,6 +5,7 @@
 #include "graph.hpp"
 
 #include <QGridLayout>
+#include <QLabel>
 #include <QListWidget>
 #include <QPushButton>
 #include <QWidget>
@@ -49,6 +50,8 @@ private:
     QPushButton*    mediumButton;
     QPushButton*    thickButton;
     QPushButton*    eraserButton;
+    QLabel*         outboundHeaderLabel;
+    QLabel*         inboundHeaderLabel;
 };
 }  // namespace Ui
 

@@ -31,9 +31,9 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     gridLayout->addWidget(newDBButton, 0, 1);
     gridLayout->addWidget(openNoteButton, 1, 0);
     gridLayout->addWidget(newNoteButton, 1, 1);
-    gridLayout->addWidget(allFilesList, 2, 0, 1, 2);
-    gridLayout->addWidget(notesTabs, 0, 2, 3, 1);
-    gridLayout->addWidget(connectionEditorButton, 0, 3);
+    gridLayout->addWidget(connectionEditorButton, 2, 0, 1, 2);
+    gridLayout->addWidget(allFilesList, 3, 0, 1, 2);
+    gridLayout->addWidget(notesTabs, 0, 2, 4, 1);
 
     // connect signals (events) to slots (methods)
     connect(openDBButton, SIGNAL(clicked()), this, SLOT(openDBButtonClicked()));

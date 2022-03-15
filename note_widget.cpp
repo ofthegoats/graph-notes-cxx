@@ -16,9 +16,16 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     eraserButton = new QPushButton("eraser", this);
     outboundLinksList = new QListWidget(this);
     inboundLinksList = new QListWidget(this);
+    outboundHeaderLabel = new QLabel("outbound links", this);
+    inboundHeaderLabel = new QLabel("inbound links", this);
     drawArea = new Ui::DrawWidget(this);
     filename = fp;
     g = graph;
+
+    outboundLinksList->setMaximumWidth(400);
+    outboundHeaderLabel->setMaximumWidth(400);
+    inboundLinksList->setMaximumWidth(400);
+    inboundHeaderLabel->setMaximumWidth(400);
 
     updateLists();
 
@@ -32,9 +39,11 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     gridLayout->addWidget(mediumButton, 0, 6);
     gridLayout->addWidget(thickButton, 0, 7);
     gridLayout->addWidget(eraserButton, 0, 8);
-    gridLayout->addWidget(drawArea, 1, 0, 2, 8);
-    gridLayout->addWidget(outboundLinksList, 1, 9);
-    gridLayout->addWidget(inboundLinksList, 2, 9);
+    gridLayout->addWidget(drawArea, 1, 0, 5, 9);
+    gridLayout->addWidget(outboundHeaderLabel, 2, 9);
+    gridLayout->addWidget(outboundLinksList, 3, 9);
+    gridLayout->addWidget(inboundHeaderLabel, 4, 9);
+    gridLayout->addWidget(inboundLinksList, 5, 9);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
