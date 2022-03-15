@@ -13,8 +13,10 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     newDBButton = new QPushButton("new database", this);
     openNoteButton = new QPushButton("open note", this);
     newNoteButton = new QPushButton("new note", this);
+    connectionEditorButton = new QPushButton("edit connections", this);
     notesTabs = new QTabWidget(this);
     allFilesList = new QListWidget(this);
+    connectionEditor = new Ui::ConnectionEditor(nullptr, {});
     dbIsOpen = false;  // no db open by default
     dbFilepath = "";
 
@@ -31,6 +33,7 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     gridLayout->addWidget(newNoteButton, 1, 1);
     gridLayout->addWidget(allFilesList, 2, 0, 1, 2);
     gridLayout->addWidget(notesTabs, 0, 2, 3, 1);
+    gridLayout->addWidget(connectionEditorButton, 0, 3);
 
     // connect signals (events) to slots (methods)
     connect(openDBButton, SIGNAL(clicked()), this, SLOT(openDBButtonClicked()));
@@ -39,6 +42,12 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     connect(newNoteButton, SIGNAL(clicked()), this, SLOT(newNoteButtonClicked()));
     connect(allFilesList, SIGNAL(itemClicked(QListWidgetItem*)), this,
       SLOT(listItemClicked(QListWidgetItem*)));
+    connect(connectionEditor, SIGNAL(addEdgeRequested(QString, QString)), this,
+      SLOT(addEdgeHandler(QString, QString)));
+    connect(connectionEditor, SIGNAL(removeEdgeRequested(QString, QString)), this,
+      SLOT(removeEdgeHandler(QString, QString)));
+    connect(
+      connectionEditorButton, SIGNAL(clicked()), this, SLOT(openConnectionEditor()));
 }
 
 void Ui::MainWindow::openDBButtonClicked()
@@ -68,6 +77,7 @@ void Ui::MainWindow::openNoteButtonClicked()
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         QFileInfo        file(fp);
         int              id = g.addNode(fp.toStdString());
+        emit             graphChanged();  // node was added
         QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         newItem->setData(Qt::UserRole, fp);
@@ -86,6 +96,7 @@ void Ui::MainWindow::newNoteButtonClicked()
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
         QFileInfo        file(fp);
         int              id = g.addNode(fp.toStdString());
+        emit             graphChanged();  // node was added
         QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         newItem->setData(Qt::UserRole, fp);
@@ -108,6 +119,7 @@ void Ui::MainWindow::openDB(QString filename)
     for (auto node : g.getNodes()) {
         QFileInfo        file(QString::fromStdString(node.data));
         QListWidgetItem* newItem = new QListWidgetItem;
+        connectionEditor->addFile(node.data);  // add files to lists
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
         newItem->setText(file.baseName());
         allFilesList->addItem(newItem);
@@ -116,9 +128,42 @@ void Ui::MainWindow::openDB(QString filename)
 
 void Ui::MainWindow::openNoteTab(QString filename, bool exists)
 {
-    NoteWidget* note = new NoteWidget(notesTabs, filename);
+    NoteWidget* note = new NoteWidget(notesTabs, filename, &g);
+    connect(note->outboundLinksList, SIGNAL(itemClicked(QListWidgetItem*)), this,
+      SLOT(listItemClicked(QListWidgetItem*)));
+    connect(note->inboundLinksList, SIGNAL(itemClicked(QListWidgetItem*)), this,
+      SLOT(listItemClicked(QListWidgetItem*)));
+    // when changes are finished, update lists
+    connect(this, SIGNAL(graphChanged()), note, SLOT(updateLists()));
+    connectionEditor->addFile(filename.toStdString());
     if (exists) note->openNote();
     notesTabs->addTab(note, QFileInfo(filename).baseName());
+    notesTabs->setCurrentWidget(note);
 }
 
 void Ui::MainWindow::closeTab(int index) { notesTabs->removeTab(index); }
+
+void Ui::MainWindow::addEdgeHandler(QString from, QString to)
+{
+    if (dbIsOpen) {
+        int fromId = g.findId(from.toStdString());
+        int toId = g.findId(to.toStdString());
+        g.addEdge(fromId, toId);
+        db_add_edge(dbFilepath.toLocal8Bit().data(), fromId, toId);
+        emit graphChanged();
+    }
+    g.traversal();
+}
+
+void Ui::MainWindow::removeEdgeHandler(QString from, QString to)
+{
+    if (dbIsOpen) {
+        int fromId = g.findId(from.toStdString());
+        int toId = g.findId(to.toStdString());
+        g.removeEdge(fromId, toId);
+        db_remove_edge(dbFilepath.toLocal8Bit().data(), fromId, toId);
+        emit graphChanged();
+    }
+}
+
+void Ui::MainWindow::openConnectionEditor() { connectionEditor->show(); }

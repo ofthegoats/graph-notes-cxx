@@ -1,6 +1,8 @@
 #include "note_widget.hpp"
 
-Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
+#include <QFileInfo>
+
+Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(parent)
 {
     gridLayout = new QGridLayout(this);
     saveButton = new QPushButton("save", this);
@@ -12,8 +14,13 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     mediumButton = new QPushButton("medium", this);
     thickButton = new QPushButton("thick", this);
     eraserButton = new QPushButton("eraser", this);
+    outboundLinksList = new QListWidget(this);
+    inboundLinksList = new QListWidget(this);
     drawArea = new Ui::DrawWidget(this);
     filename = fp;
+    g = graph;
+
+    updateLists();
 
     setLayout(gridLayout);
     gridLayout->addWidget(saveButton, 0, 0);
@@ -25,7 +32,9 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     gridLayout->addWidget(mediumButton, 0, 6);
     gridLayout->addWidget(thickButton, 0, 7);
     gridLayout->addWidget(eraserButton, 0, 8);
-    gridLayout->addWidget(drawArea, 1, 0, 2, 9);
+    gridLayout->addWidget(drawArea, 1, 0, 2, 8);
+    gridLayout->addWidget(outboundLinksList, 1, 9);
+    gridLayout->addWidget(inboundLinksList, 2, 9);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
@@ -39,6 +48,8 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp) : QWidget(parent)
     connect(eraserButton, SIGNAL(clicked()), this, SLOT(setEraser()));
 }
 
+QString Ui::NoteWidget::getFilename() { return filename; }
+
 void Ui::NoteWidget::saveNote() { drawArea->saveImage(filename); }
 void Ui::NoteWidget::openNote() { drawArea->openImage(filename); }
 
@@ -51,3 +62,25 @@ void Ui::NoteWidget::setEraser() { drawArea->setPenColour(Qt::white); }
 void Ui::NoteWidget::setWidthThin() { drawArea->setPenWidth(4); }
 void Ui::NoteWidget::setWidthMedium() { drawArea->setPenWidth(8); }
 void Ui::NoteWidget::setWidthThick() { drawArea->setPenWidth(12); }
+
+void Ui::NoteWidget::updateLists()
+{
+    g->traversal();
+    int id = g->findId(filename.toStdString());
+    inboundLinksList->clear();
+    for (auto n : g->inboundLinks(id)) {
+        QFileInfo        file(QString::fromStdString(n.data));
+        QListWidgetItem* newItem = new QListWidgetItem;
+        newItem->setData(Qt::UserRole, file.absoluteFilePath());
+        newItem->setText(file.baseName());
+        inboundLinksList->addItem(newItem);
+    }
+    outboundLinksList->clear();
+    for (auto n : g->outboundLinks(id)) {
+        QFileInfo        file(QString::fromStdString(n.data));
+        QListWidgetItem* newItem = new QListWidgetItem;
+        newItem->setData(Qt::UserRole, file.absoluteFilePath());
+        newItem->setText(file.baseName());
+        outboundLinksList->addItem(newItem);
+    }
+}
