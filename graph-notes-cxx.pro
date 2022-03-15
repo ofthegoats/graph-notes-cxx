@@ -16,14 +16,14 @@ HEADERS += database.hpp \
            main_window.hpp \
            note_widget.hpp \
            draw_widget.hpp \
-           connection_dialog.hpp
+           connection_editor.hpp
 
 SOURCES += database.cpp \
            graph.cpp \
            main_window.cpp \
            note_widget.cpp \
            draw_widget.cpp \
-           connection_dialog.cpp \
+           connection_editor.cpp \
            main.cpp
 
 QT += widgets
