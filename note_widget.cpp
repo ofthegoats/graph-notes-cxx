@@ -6,6 +6,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
 {
     gridLayout = new QGridLayout(this);
     saveButton = new QPushButton("save", this);
+    saveButton->setShortcut(Qt::CTRL + Qt::Key_S);
     blackButton = new QPushButton("black", this);
     redButton = new QPushButton("red", this);
     greenButton = new QPushButton("green", this);
@@ -74,11 +75,10 @@ void Ui::NoteWidget::setWidthThick() { drawArea->setPenWidth(12); }
 
 void Ui::NoteWidget::updateLists()
 {
-    g->traversal();
     int id = g->findId(filename.toStdString());
     inboundLinksList->clear();
     for (auto n : g->inboundLinks(id)) {
-        QFileInfo        file(QString::fromStdString(n.data));
+        QFileInfo file(QString::fromStdString(n.data));
         QListWidgetItem* newItem = new QListWidgetItem;
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
         newItem->setText(file.baseName());
@@ -86,7 +86,7 @@ void Ui::NoteWidget::updateLists()
     }
     outboundLinksList->clear();
     for (auto n : g->outboundLinks(id)) {
-        QFileInfo        file(QString::fromStdString(n.data));
+        QFileInfo file(QString::fromStdString(n.data));
         QListWidgetItem* newItem = new QListWidgetItem;
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
         newItem->setText(file.baseName());

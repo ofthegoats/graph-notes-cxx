@@ -18,8 +18,8 @@ class NoteWidget : public QWidget
 
 public:
     NoteWidget(QWidget*, QString, Graph*);  // constructor
-    ~NoteWidget() = default;                // destructor
-    QString      getFilename();
+    ~NoteWidget() = default;  // destructor
+    QString getFilename();
     QListWidget* outboundLinksList;
     QListWidget* inboundLinksList;
 
@@ -38,20 +38,20 @@ public slots:
 
 private:
     Ui::DrawWidget* drawArea;  // area for drawing on note
-    Graph*          g;  // reference to graph for database which is open, to update lists
-    QString         filename;  // used for saves/loads
-    QGridLayout*    gridLayout;
-    QPushButton*    saveButton;   // write note to file
-    QPushButton*    blackButton;  // change pen colour
-    QPushButton*    redButton;
-    QPushButton*    greenButton;
-    QPushButton*    blueButton;
-    QPushButton*    thinButton;  // change pen width
-    QPushButton*    mediumButton;
-    QPushButton*    thickButton;
-    QPushButton*    eraserButton;
-    QLabel*         outboundHeaderLabel;
-    QLabel*         inboundHeaderLabel;
+    Graph* g;  // reference to graph for database which is open, to update lists
+    QString filename;  // used for saves/loads
+    QGridLayout* gridLayout;
+    QPushButton* saveButton;  // write note to file
+    QPushButton* blackButton;  // change pen colour
+    QPushButton* redButton;
+    QPushButton* greenButton;
+    QPushButton* blueButton;
+    QPushButton* thinButton;  // change pen width
+    QPushButton* mediumButton;
+    QPushButton* thickButton;
+    QPushButton* eraserButton;
+    QLabel* outboundHeaderLabel;
+    QLabel* inboundHeaderLabel;
 };
 }  // namespace Ui
 
