@@ -15,6 +15,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     mediumButton = new QPushButton("medium", this);
     thickButton = new QPushButton("thick", this);
     eraserButton = new QPushButton("eraser", this);
+    clearAllButton = new QPushButton("clear all", this);
     outboundLinksList = new QListWidget(this);
     inboundLinksList = new QListWidget(this);
     outboundHeaderLabel = new QLabel("outbound links", this);
@@ -40,11 +41,12 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     gridLayout->addWidget(mediumButton, 0, 6);
     gridLayout->addWidget(thickButton, 0, 7);
     gridLayout->addWidget(eraserButton, 0, 8);
-    gridLayout->addWidget(drawArea, 1, 0, 5, 9);
-    gridLayout->addWidget(outboundHeaderLabel, 2, 9);
-    gridLayout->addWidget(outboundLinksList, 3, 9);
-    gridLayout->addWidget(inboundHeaderLabel, 4, 9);
-    gridLayout->addWidget(inboundLinksList, 5, 9);
+    gridLayout->addWidget(clearAllButton, 0, 9);
+    gridLayout->addWidget(drawArea, 1, 0, 5, 10);
+    gridLayout->addWidget(outboundHeaderLabel, 2, 10);
+    gridLayout->addWidget(outboundLinksList, 3, 10);
+    gridLayout->addWidget(inboundHeaderLabel, 4, 10);
+    gridLayout->addWidget(inboundLinksList, 5, 10);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
@@ -56,6 +58,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     connect(mediumButton, SIGNAL(clicked()), this, SLOT(setWidthMedium()));
     connect(thickButton, SIGNAL(clicked()), this, SLOT(setWidthThick()));
     connect(eraserButton, SIGNAL(clicked()), this, SLOT(setEraser()));
+    connect(clearAllButton, SIGNAL(clicked()), this->drawArea, SLOT(clearImage()));
 }
 
 QString Ui::NoteWidget::getFilename() { return filename; }

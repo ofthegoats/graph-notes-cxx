@@ -50,6 +50,7 @@ private:
     QPushButton* mediumButton;
     QPushButton* thickButton;
     QPushButton* eraserButton;
+    QPushButton* clearAllButton;
     QLabel* outboundHeaderLabel;
     QLabel* inboundHeaderLabel;
 };

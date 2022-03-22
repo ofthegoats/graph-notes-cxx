@@ -13,14 +13,15 @@ class DrawWidget : public QWidget
     Q_OBJECT
 
 public:
-    DrawWidget(QWidget*);     // constructor
+    DrawWidget(QWidget*);  // constructor
     ~DrawWidget() = default;  // destructor
-
     void setPenColour(QColor);
     void setPenWidth(int);
-
     void saveImage(QString);
     void openImage(QString);
+
+public slots:
+    void clearImage();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -31,14 +32,12 @@ protected:
 
 private:
     void drawLine(QPoint, QPoint);
-    void clearImage();
     void resizeImage(QImage*, const QSize&);
-
-    bool   drawing;  // whether user is drawing
+    bool drawing;  // whether user is drawing
     QColor penColour;
-    int    penWidth;
+    int penWidth;
     QPoint lastPoint;  // last point, to draw smooth lines
-    QImage image;      // image being drawn
+    QImage image;  // image being drawn
 };
 }  // namespace Ui
 
