@@ -3,6 +3,7 @@
 
 #include "connection_editor.hpp"
 #include "graph.hpp"
+#include "qwidget.h"
 
 #include <QGridLayout>
 #include <QListWidget>
@@ -21,7 +22,7 @@ signals:
 
 public:
     MainWindow(QWidget* parent = 0);  // constructor, default toplevel
-    ~MainWindow() = default;          // default destructor
+    ~MainWindow() = default;  // default destructor
 
 public slots:
     void openDBButtonClicked();
@@ -38,19 +39,21 @@ public slots:
 
 protected:
 private:
-    Graph                 g;
-    int                   currentId;
-    bool                  dbIsOpen;                // whether there is an open database
-    QString               dbFilepath;              // where that database is
-    QPushButton*          openDBButton;            // open database
-    QPushButton*          newDBButton;             // open database
-    QPushButton*          openNoteButton;          // open standalone note
-    QPushButton*          newNoteButton;           // create a new note
-    QPushButton*          connectionEditorButton;  // open connection editor
-    QListWidget*          allFilesList;            // list of all files in db
-    QTabWidget*           notesTabs;               // tabs of open files
-    QGridLayout*          gridLayout;
-    QWidget*              layoutWidget;  // placeholder, to set layout
+    Graph g;
+    int currentId;
+    bool dbIsOpen;  // whether there is an open database
+    QMenu* fileMenu;
+    QMenu* editMenu;
+    QAction* openDBAction;
+    QAction* newDBAction;
+    QAction* openNoteAction;
+    QAction* newNoteAction;
+    QAction* connectionEditorAction;
+    QString dbFilepath;  // where that database is
+    QListWidget* allFilesList;  // list of all files in db
+    QTabWidget* notesTabs;  // tabs of open files
+    QGridLayout* gridLayout;
+    QWidget* layoutWidget;  // placeholder, to set layout
     Ui::ConnectionEditor* connectionEditor;
 };
 }  // namespace Ui

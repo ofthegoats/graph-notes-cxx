@@ -3,22 +3,46 @@
 #include "database.hpp"
 #include "note_widget.hpp"
 
+#include <QAction>
 #include <QFileDialog>
+#include <QMenuBar>
 
 Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
     gridLayout = new QGridLayout(this);
     layoutWidget = new QWidget;  // placeholder, to set layout
-    openDBButton = new QPushButton("open database", this);
-    newDBButton = new QPushButton("new database", this);
-    openNoteButton = new QPushButton("open note", this);
-    newNoteButton = new QPushButton("new note", this);
-    connectionEditorButton = new QPushButton("edit connections", this);
     notesTabs = new QTabWidget(this);
     allFilesList = new QListWidget(this);
     connectionEditor = new Ui::ConnectionEditor(nullptr, {});
     dbIsOpen = false;  // no db open by default
     dbFilepath = "";
+
+    openDBAction = new QAction(tr("&Open DB"), this);
+    openDBAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_O);
+    newDBAction = new QAction(tr("&New DB"), this);
+    newDBAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
+    openNoteAction = new QAction(tr("&Open Note"), this);
+    openNoteAction->setShortcut(Qt::CTRL + Qt::Key_O);
+    newNoteAction = new QAction(tr("&New Note"), this);
+    newNoteAction->setShortcut(Qt::CTRL + Qt::Key_N);
+    connectionEditorAction = new QAction(tr("&Connection Editor"), this);
+    connectionEditorAction->setShortcut(Qt::CTRL + Qt::Key_E);
+
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(openDBAction);
+    fileMenu->addAction(newDBAction);
+    fileMenu->addAction(openNoteAction);
+    fileMenu->addAction(newNoteAction);
+
+    editMenu = menuBar()->addMenu(tr("&Edit"));
+    editMenu->addAction(connectionEditorAction);
+
+    connect(openDBAction, SIGNAL(triggered()), this, SLOT(openDBButtonClicked()));
+    connect(newDBAction, SIGNAL(triggered()), this, SLOT(newDBButtonClicked()));
+    connect(openNoteAction, SIGNAL(triggered()), this, SLOT(openNoteButtonClicked()));
+    connect(newNoteAction, SIGNAL(triggered()), this, SLOT(newNoteButtonClicked()));
+    connect(
+      connectionEditorAction, SIGNAL(triggered()), this, SLOT(openConnectionEditor()));
 
     // settings for a tab widget
     notesTabs->setMovable(true);
@@ -27,27 +51,16 @@ Ui::MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 
     layoutWidget->setLayout(gridLayout);
     setCentralWidget(layoutWidget);  // set grid layout for mainwindow
-    gridLayout->addWidget(openDBButton, 0, 0);
-    gridLayout->addWidget(newDBButton, 0, 1);
-    gridLayout->addWidget(openNoteButton, 1, 0);
-    gridLayout->addWidget(newNoteButton, 1, 1);
-    gridLayout->addWidget(connectionEditorButton, 2, 0, 1, 2);
-    gridLayout->addWidget(allFilesList, 3, 0, 1, 2);
-    gridLayout->addWidget(notesTabs, 0, 2, 4, 1);
+    gridLayout->addWidget(allFilesList, 0, 0, 1, 2);
+    gridLayout->addWidget(notesTabs, 0, 2, 1, 1);
 
     // connect signals (events) to slots (methods)
-    connect(openDBButton, SIGNAL(clicked()), this, SLOT(openDBButtonClicked()));
-    connect(newDBButton, SIGNAL(clicked()), this, SLOT(newDBButtonClicked()));
-    connect(openNoteButton, SIGNAL(clicked()), this, SLOT(openNoteButtonClicked()));
-    connect(newNoteButton, SIGNAL(clicked()), this, SLOT(newNoteButtonClicked()));
     connect(allFilesList, SIGNAL(itemClicked(QListWidgetItem*)), this,
       SLOT(listItemClicked(QListWidgetItem*)));
     connect(connectionEditor, SIGNAL(addEdgeRequested(QString, QString)), this,
       SLOT(addEdgeHandler(QString, QString)));
     connect(connectionEditor, SIGNAL(removeEdgeRequested(QString, QString)), this,
       SLOT(removeEdgeHandler(QString, QString)));
-    connect(
-      connectionEditorButton, SIGNAL(clicked()), this, SLOT(openConnectionEditor()));
 }
 
 void Ui::MainWindow::openDBButtonClicked()
@@ -124,6 +137,7 @@ void Ui::MainWindow::openDB(QString filename)
         newItem->setText(file.baseName());
         allFilesList->addItem(newItem);
     }
+    emit graphChanged();
 }
 
 void Ui::MainWindow::openNoteTab(QString filename, bool exists)
