@@ -17,7 +17,9 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     eraserButton = new QPushButton("eraser", this);
     clearAllButton = new QPushButton("clear all", this);
     undoButton = new QPushButton("undo", this);
+    undoButton->setShortcut(Qt::CTRL + Qt::Key_Z);
     redoButton = new QPushButton("redo", this);
+    redoButton->setShortcut(Qt::CTRL + Qt::Key_Y);
     outboundLinksList = new QListWidget(this);
     inboundLinksList = new QListWidget(this);
     outboundHeaderLabel = new QLabel("outbound links", this);
