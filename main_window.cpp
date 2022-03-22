@@ -150,7 +150,7 @@ void Ui::MainWindow::openNoteTab(QString filename, bool exists)
     // when changes are finished, update lists
     connect(this, SIGNAL(graphChanged()), note, SLOT(updateLists()));
     connectionEditor->addFile(filename.toStdString());
-    if (exists) note->openNote();
+    note->openNote(exists);
     notesTabs->addTab(note, QFileInfo(filename).baseName());
     notesTabs->setCurrentWidget(note);
 }

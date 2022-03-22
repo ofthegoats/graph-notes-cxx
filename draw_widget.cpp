@@ -17,9 +17,10 @@ void Ui::DrawWidget::setPenWidth(int newWidth) { penWidth = newWidth; }
 
 void Ui::DrawWidget::saveImage(QString filename) { image.save(filename, "png"); }
 
-void Ui::DrawWidget::openImage(QString filename)
+void Ui::DrawWidget::openImage(QString filename, bool exists)
 {
-    image.load(filename, "png");
+    if (exists) image.load(filename, "png");
+    undoStack.push(image);
     update();
 }
 
@@ -50,13 +51,16 @@ void Ui::DrawWidget::mouseReleaseEvent(QMouseEvent* event)
         // finish drawing
         drawLine(lastPoint, event->pos());
         drawing = false;
+        while (!redoStack.empty())
+            redoStack.pop();  // empty redos on change
+        undoStack.push(image);
     }
 }
 
 void Ui::DrawWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    QRect    dirtyRect = event->rect();  // where changes have occured
+    QRect dirtyRect = event->rect();  // where changes have occured
     painter.drawImage(dirtyRect, image, dirtyRect);
 }
 
@@ -73,12 +77,12 @@ void Ui::DrawWidget::resizeEvent(QResizeEvent* event)
 void Ui::DrawWidget::drawLine(QPoint from, QPoint to)
 {
     QPainter painter(&image);
-    painter.setPen(     // settings for pen with which to draw
-      QPen(penColour,   // line colour
-        penWidth,       // line width
+    painter.setPen(  // settings for pen with which to draw
+      QPen(penColour,  // line colour
+        penWidth,  // line width
         Qt::SolidLine,  // solid line pattern
-        Qt::RoundCap,   // how to end lines
-        Qt::RoundJoin   // how to join lines
+        Qt::RoundCap,  // how to end lines
+        Qt::RoundJoin  // how to join lines
         ));
     painter.drawLine(from, to);
     // update screen to show this change
@@ -89,7 +93,8 @@ void Ui::DrawWidget::drawLine(QPoint from, QPoint to)
 void Ui::DrawWidget::clearImage()
 {
     image.fill(qRgb(255, 255, 255));  // fill image with white
-    update();                         // update full image
+    undoStack.push(image);
+    update();  // update full image
 }
 
 void Ui::DrawWidget::resizeImage(QImage* image, const QSize& newSize)
@@ -100,4 +105,28 @@ void Ui::DrawWidget::resizeImage(QImage* image, const QSize& newSize)
     QPainter painter(&newImage);
     painter.drawImage(QPoint(0, 0), *image);
     *image = newImage;
+}
+
+void Ui::DrawWidget::undo()
+{
+    // the top of the undo stack is the current state
+    if (undoStack.size() > 1) {  // need to have something to go back to
+        QImage newImage = undoStack.top();
+        redoStack.push(newImage);
+        undoStack.pop();
+        newImage = undoStack.top();
+        image = newImage;
+        update();
+    }
+}
+
+void Ui::DrawWidget::redo()
+{
+    if (!redoStack.empty()) {
+        QImage newImage = redoStack.top();
+        redoStack.pop();
+        undoStack.push(newImage);
+        image = newImage;
+        update();
+    }
 }

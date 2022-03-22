@@ -16,6 +16,8 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     thickButton = new QPushButton("thick", this);
     eraserButton = new QPushButton("eraser", this);
     clearAllButton = new QPushButton("clear all", this);
+    undoButton = new QPushButton("undo", this);
+    redoButton = new QPushButton("redo", this);
     outboundLinksList = new QListWidget(this);
     inboundLinksList = new QListWidget(this);
     outboundHeaderLabel = new QLabel("outbound links", this);
@@ -42,11 +44,13 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     gridLayout->addWidget(thickButton, 0, 7);
     gridLayout->addWidget(eraserButton, 0, 8);
     gridLayout->addWidget(clearAllButton, 0, 9);
-    gridLayout->addWidget(drawArea, 1, 0, 5, 10);
-    gridLayout->addWidget(outboundHeaderLabel, 2, 10);
-    gridLayout->addWidget(outboundLinksList, 3, 10);
-    gridLayout->addWidget(inboundHeaderLabel, 4, 10);
-    gridLayout->addWidget(inboundLinksList, 5, 10);
+    gridLayout->addWidget(undoButton, 0, 10);
+    gridLayout->addWidget(redoButton, 0, 11);
+    gridLayout->addWidget(drawArea, 1, 0, 5, 12);
+    gridLayout->addWidget(outboundHeaderLabel, 2, 13);
+    gridLayout->addWidget(outboundLinksList, 3, 13);
+    gridLayout->addWidget(inboundHeaderLabel, 4, 13);
+    gridLayout->addWidget(inboundLinksList, 5, 13);
 
     // connect signals (event) to slots (methods)
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
@@ -59,12 +63,14 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     connect(thickButton, SIGNAL(clicked()), this, SLOT(setWidthThick()));
     connect(eraserButton, SIGNAL(clicked()), this, SLOT(setEraser()));
     connect(clearAllButton, SIGNAL(clicked()), this->drawArea, SLOT(clearImage()));
+    connect(undoButton, SIGNAL(clicked()), this->drawArea, SLOT(undo()));
+    connect(redoButton, SIGNAL(clicked()), this->drawArea, SLOT(redo()));
 }
 
 QString Ui::NoteWidget::getFilename() { return filename; }
 
 void Ui::NoteWidget::saveNote() { drawArea->saveImage(filename); }
-void Ui::NoteWidget::openNote() { drawArea->openImage(filename); }
+void Ui::NoteWidget::openNote(bool exists) { drawArea->openImage(filename, exists); }
 
 void Ui::NoteWidget::setColourBlack() { drawArea->setPenColour(Qt::black); }
 void Ui::NoteWidget::setColourRed() { drawArea->setPenColour(Qt::red); }

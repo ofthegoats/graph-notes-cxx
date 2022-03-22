@@ -25,7 +25,7 @@ public:
 
 public slots:
     void saveNote();
-    void openNote();
+    void openNote(bool);
     void setColourBlack();
     void setColourRed();
     void setColourGreen();
@@ -51,6 +51,8 @@ private:
     QPushButton* thickButton;
     QPushButton* eraserButton;
     QPushButton* clearAllButton;
+    QPushButton* undoButton;
+    QPushButton* redoButton;
     QLabel* outboundHeaderLabel;
     QLabel* inboundHeaderLabel;
 };

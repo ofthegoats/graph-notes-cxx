@@ -5,6 +5,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QWidget>
+#include <stack>
 
 namespace Ui
 {
@@ -18,10 +19,12 @@ public:
     void setPenColour(QColor);
     void setPenWidth(int);
     void saveImage(QString);
-    void openImage(QString);
+    void openImage(QString, bool);
 
 public slots:
     void clearImage();
+    void undo();
+    void redo();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -38,6 +41,8 @@ private:
     int penWidth;
     QPoint lastPoint;  // last point, to draw smooth lines
     QImage image;  // image being drawn
+    std::stack<QImage> undoStack;
+    std::stack<QImage> redoStack;
 };
 }  // namespace Ui
 
