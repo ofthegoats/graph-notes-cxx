@@ -75,9 +75,9 @@ void Ui::MainWindow::openNoteButtonClicked()
     if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
-        QFileInfo        file(fp);
-        int              id = g.addNode(fp.toStdString());
-        emit             graphChanged();  // node was added
+        QFileInfo file(fp);
+        int id = g.addNode(fp.toStdString());
+        emit graphChanged();  // node was added
         QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         newItem->setData(Qt::UserRole, fp);
@@ -94,9 +94,9 @@ void Ui::MainWindow::newNoteButtonClicked()
     if (fp == "") return;
     // when db is open, new notes join the graph and db
     if (dbIsOpen && g.findId(fp.toStdString()) == -1) {
-        QFileInfo        file(fp);
-        int              id = g.addNode(fp.toStdString());
-        emit             graphChanged();  // node was added
+        QFileInfo file(fp);
+        int id = g.addNode(fp.toStdString());
+        emit graphChanged();  // node was added
         QListWidgetItem* newItem = new QListWidgetItem;
         db_add_node(dbFilepath.toLocal8Bit().data(), id, fp.toLocal8Bit().data());
         newItem->setData(Qt::UserRole, fp);
@@ -117,7 +117,7 @@ void Ui::MainWindow::openDB(QString filename)
     dbIsOpen = true;
     dbFilepath = filename;
     for (auto node : g.getNodes()) {
-        QFileInfo        file(QString::fromStdString(node.data));
+        QFileInfo file(QString::fromStdString(node.data));
         QListWidgetItem* newItem = new QListWidgetItem;
         connectionEditor->addFile(node.data);  // add files to lists
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
@@ -152,7 +152,6 @@ void Ui::MainWindow::addEdgeHandler(QString from, QString to)
         db_add_edge(dbFilepath.toLocal8Bit().data(), fromId, toId);
         emit graphChanged();
     }
-    g.traversal();
 }
 
 void Ui::MainWindow::removeEdgeHandler(QString from, QString to)
