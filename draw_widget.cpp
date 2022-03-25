@@ -30,6 +30,7 @@ void Ui::DrawWidget::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         // update position and show that user is drawing
         lastPoint = event->pos();
+        drawPoint(event->pos());
         drawing = true;
     }
 }
@@ -88,6 +89,20 @@ void Ui::DrawWidget::drawLine(QPoint from, QPoint to)
     // update screen to show this change
     int rad = (penWidth / 2) + 2;
     update(QRect(from, to).normalized().adjusted(-rad, -rad, rad, rad));
+}
+
+void Ui::DrawWidget::drawPoint(QPoint pos)
+{
+    QPainter painter(&image);
+    painter.setPen(  // settings for pen with which to draw
+      QPen(penColour,  // line colour
+        penWidth,  // line width
+        Qt::SolidLine,  // solid line pattern
+        Qt::RoundCap,  // how to end lines
+        Qt::RoundJoin  // how to join lines
+        ));
+    painter.drawPoint(pos);
+    update();
 }
 
 void Ui::DrawWidget::clearImage()

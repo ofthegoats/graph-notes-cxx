@@ -35,6 +35,7 @@ protected:
 
 private:
     void drawLine(QPoint, QPoint);
+    void drawPoint(QPoint);
     void resizeImage(QImage*, const QSize&);
     bool drawing;  // whether user is drawing
     QColor penColour;
