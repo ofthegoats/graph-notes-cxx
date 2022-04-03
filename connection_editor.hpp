@@ -8,15 +8,17 @@
 
 namespace Ui
 {
-class ConnectionEditor : public QWidget
+class ConnectionEditor : public QWidget  // inherits from QWidget
 {
     Q_OBJECT
 
 signals:
+    // signals sent from this widget to the main window
     void addEdgeRequested(QString, QString);
     void removeEdgeRequested(QString, QString);
 
 private slots:
+    // methods called to add and remove edges
     void requestAddEdge();
     void requestRemoveEdge();
 
@@ -25,8 +27,8 @@ public:
     ~ConnectionEditor() = default;
     QPushButton* addEdgeButton;
     QPushButton* removeEdgeButton;
-    void         removeFile(std::string);
-    void         addFile(std::string);
+    void removeFile(std::string);
+    void addFile(std::string);
 
 private:
     QGridLayout* gridLayout;
@@ -34,8 +36,7 @@ private:
     QListWidget* targetsList;
     // main window will link button signals to notes
     std::vector<std::string> allFiles;
-
-    void updateLists();
+    void updateLists();  // update the lists which the user can see
 };
 }  // namespace Ui
 

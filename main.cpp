@@ -4,7 +4,8 @@
 
 int main(int argc, char* argv[])
 {
-    QApplication   graphNotes(argc, argv);
+    // start up the application
+    QApplication graphNotes(argc, argv);
     Ui::MainWindow window;
     window.show();
     return graphNotes.exec();

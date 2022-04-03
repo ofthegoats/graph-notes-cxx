@@ -19,11 +19,12 @@ class NoteWidget : public QWidget
 public:
     NoteWidget(QWidget*, QString, Graph*);  // constructor
     ~NoteWidget() = default;  // destructor
-    QString getFilename();
+    // lists of connected files
     QListWidget* outboundLinksList;
     QListWidget* inboundLinksList;
 
 public slots:
+    // methods connected to signals
     void saveNote();
     void openNote(bool);
     void setColourBlack();
@@ -50,10 +51,10 @@ private:
     QPushButton* mediumButton;
     QPushButton* thickButton;
     QPushButton* eraserButton;
-    QPushButton* clearAllButton;
-    QPushButton* undoButton;
+    QPushButton* clearAllButton;  // clear the drawing area
+    QPushButton* undoButton;  // undo and redo
     QPushButton* redoButton;
-    QLabel* outboundHeaderLabel;
+    QLabel* outboundHeaderLabel;  // labels for lists of connected notes
     QLabel* inboundHeaderLabel;
 };
 }  // namespace Ui

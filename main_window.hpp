@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow  // inherits from QMainWindow
     Q_OBJECT
 
 signals:
+    // signal used to tell other widgets when to update graphs
     void graphChanged();
 
 public:
@@ -25,6 +26,7 @@ public:
     ~MainWindow() = default;  // default destructor
 
 public slots:
+    // public functions to connect to signals
     void openDBButtonClicked();
     void newDBButtonClicked();
     void openNoteButtonClicked();
@@ -37,24 +39,22 @@ public slots:
     void removeEdgeHandler(QString, QString);
     void openConnectionEditor();
 
-protected:
 private:
-    Graph g;
-    int currentId;
-    bool dbIsOpen;  // whether there is an open database
-    QMenu* fileMenu;
+    QMenu* fileMenu;  // menus and actions therein
     QMenu* editMenu;
     QAction* openDBAction;
     QAction* newDBAction;
     QAction* openNoteAction;
     QAction* newNoteAction;
     QAction* connectionEditorAction;
-    QString dbFilepath;  // where that database is
+    QWidget* layoutWidget;  // placeholder, to set layout
     QListWidget* allFilesList;  // list of all files in db
     QTabWidget* notesTabs;  // tabs of open files
     QGridLayout* gridLayout;
-    QWidget* layoutWidget;  // placeholder, to set layout
-    Ui::ConnectionEditor* connectionEditor;
+    Graph g;  // graph storing structure of user notes
+    bool dbIsOpen;  // whether there is an open database
+    QString dbFilepath;  // where the database is stored
+    Ui::ConnectionEditor* connectionEditor;  // widget used to manage edges
 };
 }  // namespace Ui
 

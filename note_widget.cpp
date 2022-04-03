@@ -2,8 +2,10 @@
 
 #include <QFileInfo>
 
+// constructor, return a new note widget
 Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(parent)
 {
+    // instances of elements: buttons with shortcuts, drawing area, layout
     gridLayout = new QGridLayout(this);
     saveButton = new QPushButton("save", this);
     saveButton->setShortcut(Qt::CTRL + Qt::Key_S);
@@ -28,6 +30,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     filename = fp;
     g = graph;
 
+    // graphical settings to lists do not become too wide
     outboundLinksList->setMaximumWidth(400);
     outboundHeaderLabel->setMaximumWidth(400);
     inboundLinksList->setMaximumWidth(400);
@@ -35,6 +38,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
 
     updateLists();
 
+    // layout all the widgets
     setLayout(gridLayout);
     gridLayout->addWidget(saveButton, 0, 0);
     gridLayout->addWidget(blackButton, 0, 1);
@@ -54,7 +58,7 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     gridLayout->addWidget(inboundHeaderLabel, 4, 13);
     gridLayout->addWidget(inboundLinksList, 5, 13);
 
-    // connect signals (event) to slots (methods)
+    // connect buttons to appropriate methods
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNote()));
     connect(blackButton, SIGNAL(clicked()), this, SLOT(setColourBlack()));
     connect(redButton, SIGNAL(clicked()), this, SLOT(setColourRed()));
@@ -69,28 +73,33 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     connect(redoButton, SIGNAL(clicked()), this->drawArea, SLOT(redo()));
 }
 
-QString Ui::NoteWidget::getFilename() { return filename; }
-
+// simple file management procedures
 void Ui::NoteWidget::saveNote() { drawArea->saveImage(filename); }
 void Ui::NoteWidget::openNote(bool exists) { drawArea->openImage(filename, exists); }
 
+// simple colour management procedures
 void Ui::NoteWidget::setColourBlack() { drawArea->setPenColour(Qt::black); }
 void Ui::NoteWidget::setColourRed() { drawArea->setPenColour(Qt::red); }
 void Ui::NoteWidget::setColourGreen() { drawArea->setPenColour(Qt::green); }
 void Ui::NoteWidget::setColourBlue() { drawArea->setPenColour(Qt::blue); }
 void Ui::NoteWidget::setEraser() { drawArea->setPenColour(Qt::white); }
 
+// simple width management procedures
 void Ui::NoteWidget::setWidthThin() { drawArea->setPenWidth(4); }
 void Ui::NoteWidget::setWidthMedium() { drawArea->setPenWidth(8); }
 void Ui::NoteWidget::setWidthThick() { drawArea->setPenWidth(12); }
 
+// update lists of connected notes to match the new graph
 void Ui::NoteWidget::updateLists()
 {
+    // need id to find connected nodes
     int id = g->findId(filename.toStdString());
+    // clear list and readd new values
     inboundLinksList->clear();
     for (auto n : g->inboundLinks(id)) {
         QFileInfo file(QString::fromStdString(n.data));
         QListWidgetItem* newItem = new QListWidgetItem;
+        // store full path but only show base filename to user
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
         newItem->setText(file.baseName());
         inboundLinksList->addItem(newItem);
@@ -99,6 +108,7 @@ void Ui::NoteWidget::updateLists()
     for (auto n : g->outboundLinks(id)) {
         QFileInfo file(QString::fromStdString(n.data));
         QListWidgetItem* newItem = new QListWidgetItem;
+        // store full path but only show base filename to user
         newItem->setData(Qt::UserRole, file.absoluteFilePath());
         newItem->setText(file.baseName());
         outboundLinksList->addItem(newItem);
