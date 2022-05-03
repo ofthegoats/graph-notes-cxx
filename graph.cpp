@@ -41,7 +41,8 @@ void Graph::removeNode(int id)
 void Graph::addEdge(int src_id, int dest_id)
 {
     // only add the edge if it does not already exist
-    if (!this->containsEdge(src_id, dest_id)) {
+    if (!this->containsEdge(src_id, dest_id) && this->containsNode(src_id)
+        && this->containsNode(dest_id)) {
         for (auto it = this->graph.begin(); it != this->graph.end(); it++) {
             if (it->first.id == src_id) { it->second.push_back(dest_id); }
         }
@@ -82,7 +83,7 @@ bool Graph::containsEdge(int src_id, int dest_id)
 
 std::vector<node> Graph::outboundLinks(int src_id)
 {
-    std::vector<int>  ids;
+    std::vector<int> ids;
     std::vector<node> nodes;
     for (auto n : this->graph)
         if (n.first.id == src_id)
@@ -96,9 +97,9 @@ std::vector<node> Graph::outboundLinks(int src_id)
 
 std::vector<node> Graph::inboundLinks(int dest_id)
 {
-    std::vector<int>  ids;
+    std::vector<int> ids;
     std::vector<node> nodes;
-    bool              has_link;
+    bool has_link;
     for (auto n : this->graph) {
         has_link = false;
         for (auto m : n.second)
