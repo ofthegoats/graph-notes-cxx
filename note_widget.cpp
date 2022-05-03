@@ -2,6 +2,14 @@
 
 #include <QFileInfo>
 
+void setButtonIcon(QString path, QPushButton* button)
+{
+    QPixmap pixmap(path);
+    QIcon bIcon(pixmap);
+    button->setIcon(bIcon);
+    button->setIconSize(pixmap.rect().size());
+}
+
 // constructor, return a new note widget
 Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(parent)
 {
@@ -9,10 +17,10 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     gridLayout = new QGridLayout(this);
     saveButton = new QPushButton("save", this);
     saveButton->setShortcut(Qt::CTRL + Qt::Key_S);
-    blackButton = new QPushButton("black", this);
-    redButton = new QPushButton("red", this);
-    greenButton = new QPushButton("green", this);
-    blueButton = new QPushButton("blue", this);
+    blackButton = new QPushButton(this);
+    redButton = new QPushButton(this);
+    greenButton = new QPushButton(this);
+    blueButton = new QPushButton(this);
     thinButton = new QPushButton("thin", this);
     mediumButton = new QPushButton("medium", this);
     thickButton = new QPushButton("thick", this);
@@ -29,6 +37,20 @@ Ui::NoteWidget::NoteWidget(QWidget* parent, QString fp, Graph* graph) : QWidget(
     drawArea = new Ui::DrawWidget(this);
     filename = fp;
     g = graph;
+
+    setButtonIcon(
+      "/usr/share/icons/Adwaita/24x24/actions/document-save-symbolic.symbolic.png", saveButton);
+    setButtonIcon("/usr/share/icons/Adwaita/24x24/actions/edit-clear-all-symbolic.symbolic.png",
+      clearAllButton);
+    setButtonIcon(
+      "/usr/share/icons/Adwaita/24x24/actions/edit-undo-symbolic.symbolic.png", undoButton);
+    setButtonIcon(
+      "/usr/share/icons/Adwaita/24x24/actions/edit-redo-symbolic.symbolic.png", redoButton);
+
+    blackButton->setStyleSheet("background-color: black");
+    redButton->setStyleSheet("background-color: red");
+    greenButton->setStyleSheet("background-color: green");
+    blueButton->setStyleSheet("background-color: blue");
 
     // graphical settings to lists do not become too wide
     outboundLinksList->setMaximumWidth(400);
